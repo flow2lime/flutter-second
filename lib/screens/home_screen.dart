@@ -45,7 +45,15 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  String foramt(int seconds) {
+  void reset() {
+    timer.cancel();
+    setState(() {
+      isRunning = false;
+      totalSeconds = twentyFiveMinutes;
+    });
+  }
+
+  String format(int seconds) {
     var duration = Duration(seconds: seconds);
     return duration.toString().split(".").first.substring(2, 7);
   }
@@ -57,11 +65,11 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: [
           Flexible(
-            flex: 1,
+            flex: 2,
             child: Container(
-              alignment: Alignment.bottomCenter,
+              alignment: Alignment.center,
               child: Text(
-                foramt(totalSeconds),
+                format(totalSeconds),
                 style: const TextStyle(
                   color: Color(0xFFF4EDDB),
                   fontSize: 89,
@@ -71,15 +79,32 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Flexible(
-            flex: 3,
+            flex: 2,
             child: Center(
-              child: IconButton(
-                iconSize: 120,
-                color: Theme.of(context).cardColor,
-                onPressed: isRunning ? onPausePressed : onStartPressed,
-                icon: Icon(isRunning
-                    ? Icons.pause_circle_outline
-                    : Icons.play_circle_outline),
+              child: Column(
+                children: [
+                  IconButton(
+                    iconSize: 120,
+                    color: Theme.of(context).cardColor,
+                    onPressed: isRunning ? onPausePressed : onStartPressed,
+                    icon: Icon(
+                      isRunning
+                          ? Icons.pause_circle_outline
+                          : Icons.play_circle_outline,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  IconButton(
+                    iconSize: 80,
+                    color: Theme.of(context).cardColor,
+                    onPressed: reset,
+                    icon: const Icon(
+                      Icons.restore_outlined,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
